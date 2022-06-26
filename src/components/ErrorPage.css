@@ -1,0 +1,12 @@
+.centerError{
+    text-align: center;
+    margin: 0 auto;
+}
+.error{
+    width: 600px;
+    height: auto;
+}
+
+.bg{
+    background: #8CD181 !important;
+}

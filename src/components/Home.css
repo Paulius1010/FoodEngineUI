@@ -1,0 +1,49 @@
+.second_section {
+    height: auto;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom: solid 3.5px #8AA82D;
+    padding: 20px 0;
+}
+
+.ss_header {
+    font-family: "Calibri";
+    font-size: 130%;
+    color: #6b8910;
+    font-weight: bold;
+    padding-bottom: 13px;
+}
+
+.ss_content {
+    font-family: "Calibri";
+}
+
+.third_section {
+    height: auto;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding: 20px 0;
+}
+
+.mt-custom {
+    margin: 5rem auto;
+    border-radius: 4px;
+}
+
+.sticky-config {
+    z-index: 1;
+    position: sticky;
+    top: 0;
+}
+
+/* limit progress bar */
+.mb-pb-fix {
+    margin: 1rem 0 0.5rem 0;
+}
+
+/*  */
+.box-shadow {
+    box-shadow: 0px 0px 12px 0px rgba(96, 130, 19, 0.58);
+    -webkit-box-shadow: 0px 0px 12px 0px rgba(96, 130, 19, 0.58);
+    -moz-box-shadow: 0px 0px 12px 0px rgba(96, 130, 19, 0.58);
+}

@@ -1,0 +1,11 @@
+.page-item .page-link {
+    color: gray;
+}
+
+.page-item:hover {
+    color: gray !important;
+}
+
+.page-link:hover {
+    color: gray !important;
+}

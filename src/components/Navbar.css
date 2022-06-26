@@ -1,0 +1,21 @@
+#button-hover:hover {
+    background-color: #e9ffd6;
+    border-radius: 0.3rem;
+
+}
+
+#home_button {
+    /* color: #5a7d09; */
+    width: 25px;
+    padding: 0 10px;
+    height: auto;
+}
+
+#button-hover {
+    transition: 0.3s;
+}
+
+/* .site-logo{
+    font-family: 'Ink Free';
+    font-size: 50px !important;
+} */
