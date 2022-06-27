@@ -6,22 +6,21 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AuthService from "../services/auth.service";
 import { useForm } from "react-hook-form";
-import EditDishModal from "./EditDishModal";
-import DeleteModal from "./DeleteModal";
+import OrderIncreaseModal from "./OrderIncreaseModal";
 import Table from "react-bootstrap/Table";
 import ReactCSV from "./ReactCSV";
 import Accordion from 'react-bootstrap/Accordion'
 
 
-export default function Dishes() {
-  const [allMenus, setAllMenus] = useState([]);
+export default function DishOrdering() {
   const [allRestaurants, setAllRestaurants] = useState([]);
   const [selectedRestaurantId, setSelectedRestaurantId] = useState([]);
+  const [selectedMenuId, setSelectedMenuId] = useState([]);
   const [selectedRestaurantMenus, setSelectedRestaurantMenus] = useState([]);
   const [allDishes, setAllDishes] = useState([]);
   const [forceRender, setForceRender] = useState(false);
-  const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
-  const [deleteId, setDeleteId] = useState();
+  const [displayOrderIncreaseModal, setDisplayOrderIncreaseModal] = useState(false);
+  const [orderIncreaseId, setOrderIncreaseId] = useState();
   const currentUser = AuthService.getCurrentUser();
   const {
     register,
@@ -71,22 +70,21 @@ export default function Dishes() {
     fetchData();
   }, [selectedRestaurantId]);
 
-  
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`http://localhost:8080/api/restaurants/menu`,
-      {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${currentUser.accessToken}`
-        }
-      });
+      const response = await fetch(`http://localhost:8080/api/restaurants/${selectedRestaurantId}/menu/dishes`,
+        {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentUser.accessToken}`
+          }
+        });
       const data = await response.json();
-      setAllMenus(data);
+      setAllDishes(data);
     };
     fetchData();
-  }, [forceRender]);
+  }, [selectedRestaurantId]);
 
   const onSubmit = async (data) => {
     const response = await fetch("http://localhost:8080/api/restaurants/menu/dishes", {
@@ -114,6 +112,22 @@ export default function Dishes() {
     setForceRender(!forceRender);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`http://localhost:8080/api/restaurants/menu/${selectedMenuId}/dishes`,
+      {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUser.accessToken}`
+        }
+      });
+      const data = await response.json();
+      setAllDishes(data);
+    };
+    fetchData();
+  }, [selectedMenuId]);
+
   // Popup message configuration
   toast.configure();
   const successMessage = (msg) => {
@@ -135,9 +149,9 @@ export default function Dishes() {
     });
   };
 
-  const removeDish = async (id) => {
-    const response = await fetch(`http://localhost:8080/api/restaurants/menu/dishes/${id}`, {
-      method: "DELETE",
+  const orderDish = async (id) => {
+    const response = await fetch(`http://localhost:8080/api/orders/${id}`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${currentUser.accessToken}`,
@@ -145,22 +159,23 @@ export default function Dishes() {
     });
 
     if (response.status === 200) {
-      successMessage("Ištrinta");
+      successMessage("Užsakyta");
+      reset();
     } else {
       errorMessage("Klaida!");
     }
 
     setForceRender(!forceRender);
-    setDisplayDeleteModal(false);
+    setDisplayOrderIncreaseModal(false);
+  };
+  
+  const showOrderIncreaseModal = (id) => {
+    setDisplayOrderIncreaseModal(true);
+    setOrderIncreaseId(id);
   };
 
-  const showDeleteModal = (id) => {
-    setDisplayDeleteModal(true);
-    setDeleteId(id);
-  };
-
-  const hideDeleteModal = () => {
-    setDisplayDeleteModal(false);
+  const hideOrderIncreaseModal = () => {
+    setDisplayOrderIncreaseModal(false);
   };
 
 
@@ -184,18 +199,13 @@ export default function Dishes() {
     fetchData();
   }, [forceRender]);
 
-
-
-
   return (
     <>
-
-
       <div className="container-fluid budget__expense sticky-config">
         <div className="container">
           <div className="row">
             <div className="col">
-              <h2>Patiekalų skaičius: {dishesSum} </h2>
+              <h2>Rinkitės iš {dishesSum} patiekalų  </h2>
             </div>
           </div>
         </div>
@@ -206,7 +216,7 @@ export default function Dishes() {
           <div >
             <Accordion defaultActiveKey="0" >
               <Accordion.Item eventKey="0" >
-                <Accordion.Header >Naujas įrašas</Accordion.Header>
+                <Accordion.Header >Pasirinkite sąrašą patiekalų iš norimo restorano ir meniu</Accordion.Header>
                 <Accordion.Body >
                   <div className="add">
                     <div className="row text-center add__container">
@@ -236,6 +246,7 @@ export default function Dishes() {
                           })}
                           className="form-control add__description"
                           type="text"
+                          onChange={(e) => setSelectedMenuId(e.target.value) }
                         >
                           <option value={""}>--Pasirinkite meniu--</option>
                           {selectedRestaurantMenus.map((option) => (
@@ -243,70 +254,9 @@ export default function Dishes() {
                           ))}
                         </select>
 
-
-                        <input
-                          {...register("dishName", { required: true, minLength: 3, maxLength: 20 })}
-                          type="text"
-                          className="form-control add__description"
-                          placeholder="Pavadinimas"
-                        />
-
-                        <input
-                          {...register("dishDescription", { required: true, minLength: 3, maxLength: 20 })}
-                          type="text"
-                          className="form-control add__description"
-                          placeholder="Apibūdinimas"
-                        />
-                        <input
-                          {...register("dishPrice", { required: true, minLength: 3, maxLength: 20 })}
-                          type="text"
-                          className="form-control add__description"
-                          placeholder="Kaina"
-                        />
-
-                        <input
-                          {...register("dishTime", {
-                            required: true,
-                            min: 1,
-                          })}
-                          type="number"
-                          className="form-control add__value"
-                          placeholder="Paruošimo trukmė"
-                          step="1"
-                        />
-
-                        <div className="input-group-append">
-                          <button className="btn" type="submit">
-                            <FontAwesomeIcon
-                              icon={faCirclePlus}
-                              className="add__btn__expense"
-                            />
-                          </button>
-                        </div>
                       </form>
                     </div>
-                    <div className="row ">
-                      <div className="col-sm-3 col-3">
-                        {errors?.expenseName?.type === "required" && (
-                          <p>Šis laukas yra privalomas</p>
-                        )}
-                        {errors?.expenseName?.type === "minLength" && (
-                          <p>Aprašymas turi būti bent 3 simbolių ilgio</p>
-                        )}
-                        {errors?.incomeName?.type === "maxLength" && (
-                          <p>Aprašymas negali būti ilgesnis negu 10 simbolių</p>
-                        )}
-                      </div>
-
-                      <div className="col-sm-3 col-3">
-                        {errors?.dishTime?.type === "required" && (
-                          <p>Šis laukas yra privalomas</p>
-                        )}
-                        {errors?.dishTime?.type === "min" && (
-                          <p>Mažiausia trukmė 1 min</p>
-                        )}
-                      </div>
-                    </div>
+       
                   </div>
                 </Accordion.Body>
               </Accordion.Item>
@@ -356,28 +306,15 @@ export default function Dishes() {
                             paddingRight: 0,
                           }}
                         >
-                          <EditDishModal
-                            id={dish.id}
-                            restaurantId={dish.restaurantId}
-                            menuId={dish.menuId}
-                            dishName={dish.name}
-                            dishDescription={dish.description}
-                            dishPrice={dish.price}
-                            dishTime={dish.preparationTimeInMinutes}
-                            forceRender={forceRender}
-                            setForceRender={setForceRender}
-                            allRestaurants={allRestaurants}
-                            allMenus={allMenus}
-                            />
 
                           <button
-                            onClick={() => showDeleteModal(dish.id)}
+                            onClick={() => showOrderIncreaseModal(dish.id)}
                             className="btn"
                             type="button"
                             style={{ paddingTop: 0, paddingBottom: 10 }}
                           >
                             <FontAwesomeIcon
-                              icon="trash"
+                              icon={faCirclePlus}
                               className="add__btn__expense"
                               style={{ width: "20px" }}
                             />
@@ -387,11 +324,11 @@ export default function Dishes() {
                     );
                   })}
                 </tbody>
-                <DeleteModal
-                  showModal={displayDeleteModal}
-                  hideModal={hideDeleteModal}
-                  confirmModal={removeDish}
-                  id={deleteId}
+                <OrderIncreaseModal
+                  showModal={displayOrderIncreaseModal}
+                  hideModal={hideOrderIncreaseModal}
+                  confirmModal={orderDish}
+                  id={orderIncreaseId}
                 />
               </Table>
             </div>

@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import EditMenuModal from "./EditMenuModal";
 import DeleteModal from "./DeleteModal";
 import Table from "react-bootstrap/Table";
-import "./Pagination.css";
 
 export default function Menu() {
   const [allMenus, setAllMenus] = useState([]);
