@@ -5,13 +5,13 @@ import Register from "./components/Register";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import BoardUser from "./components/BoardUser";
-// import BoardModerator from "./components/BoardModerator";
 import HomeLoggedIn from "./components/HomeLoggedIn";
 import Restaurants from "./components/Restaurants";
 import Dishes from "./components/Dishes";
+import DishOrdering from "./components/DishOrdering";
 import Orders from "./components/Orders";
+import OrdersAdministration from "./components/OrdersAdministration";
 import Menu from "./components/Menu";
-import Category from "./components/Category";
 import "./components/FontAwesomeIcon/Icons";
 import './App.css';
 import Navbar from "./components/Navbar";
@@ -51,9 +51,10 @@ const App = () => {
             <Route path="/statistics" element={<HomeLoggedIn />} />
             <Route path="/restaurants" element={<Restaurants />} />
             <Route path="/dishes" element={<Dishes />} />
+            <Route path="/dishordering" element={<DishOrdering />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/ordersadmin" element={<OrdersAdministration />} />
             <Route path="/menu" element={<Menu />} />
-            <Route path="/category" element={<Category />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/contacts" element={<Contacts />} />
             <Route path="*" element={<ErrorPage />} />

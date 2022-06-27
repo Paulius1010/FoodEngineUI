@@ -1,6 +1,6 @@
 import { Modal, Button } from "react-bootstrap";
 
-const DeleteIncomeModal = ({ showModal, hideModal, confirmModal, id }) => {
+const OrderIncreaseModal = ({ showModal, hideModal, confirmModal, id }) => {
   return (
     <Modal
       show={showModal}
@@ -9,23 +9,23 @@ const DeleteIncomeModal = ({ showModal, hideModal, confirmModal, id }) => {
       backdrop="static"
     >
       <Modal.Header closeButton>
-        <Modal.Title>Trynimo patvirtinimas</Modal.Title>
+        <Modal.Title>Užsakymo patvirtinimas</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
-        <div className="alert alert-danger">Ar tikrai norite pašalinti šį įrašą?</div>
+        <div className="alert alert-danger">Ar tikrai norite užsakyti patiekalą?</div>
       </Modal.Body>
 
       <Modal.Footer>
         <Button variant="default" onClick={hideModal}>
           Atšaukti
         </Button>
-        <Button variant="danger" onClick={() => confirmModal(id)}>
-          Trinti
+        <Button variant="primary" onClick={() => confirmModal(id)}>
+          Užsakyti
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default DeleteIncomeModal;
+export default OrderIncreaseModal;

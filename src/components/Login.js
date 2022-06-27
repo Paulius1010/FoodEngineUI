@@ -20,10 +20,10 @@ export default function Login() {
                     .then(data => {
                         if (data.roles.some(role => role.name === "ROLE_ADMIN")) {
                             // navigate("/admin");
-                            navigate("/users");
+                            navigate("/ordersadmin");
                             setRender(!render);
                         } else {
-                            navigate("/income");
+                            navigate("/dishordering");
                             setRender(!render);
                         }
                     });

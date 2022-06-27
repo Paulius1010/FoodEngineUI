@@ -10,7 +10,6 @@ import EditUserModal from "./EditUserModal";
 import DeleteModal from "./DeleteModal";
 import ReactPaginate from "react-paginate";
 import Table from "react-bootstrap/Table";
-import "./Pagination.css";
 
 export default function Users() {
   const [allUsers, setAllUsers] = useState([]);

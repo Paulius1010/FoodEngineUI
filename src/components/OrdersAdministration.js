@@ -12,7 +12,7 @@ import Table from "react-bootstrap/Table";
 import ReactCSV from "./ReactCSV";
 import Accordion from 'react-bootstrap/Accordion'
 
-export default function Orders() {
+export default function OrdersAdministration() {
   const [allOrders, setAllOrders] = useState([]);
   const [allDishes, setAllDishes] = useState([]);
   const [forceRender, setForceRender] = useState(false);
@@ -25,7 +25,7 @@ export default function Orders() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`http://localhost:8080/api/orders`,
+      const response = await fetch(`http://localhost:8080/api/orders/all`,
       {
         method: "GET",
         headers: {
@@ -174,10 +174,12 @@ export default function Orders() {
             className="col-12 expense"
             style={{ paddingLeft: 0, paddingRight: 0 }}
           >
+            {/* <h2 className="expense__title">Išlaidos</h2> */}
             <div className="expense__list">
               <Table hover>
                 <thead>
                   <tr>
+                    <th>Vartotojas</th>
                     <th>Restoranas</th>
                     <th>Meniu</th>
                     <th>Pavadinimas</th>
@@ -191,6 +193,7 @@ export default function Orders() {
                     return (
 
                       <tr key={order.dishId}>
+                        <td>{order.userEmail}&nbsp;</td>
                         <td>{order.restaurantName}&nbsp;</td>
                         <td>{order.menuName}&nbsp;</td>
                         <td>{order.dishName}&nbsp;</td>
@@ -199,6 +202,7 @@ export default function Orders() {
 
                         <td
                         >
+
                           <button
                             onClick={() => showOrderDecreaseModal(order.dishId)}
                             className="btn"

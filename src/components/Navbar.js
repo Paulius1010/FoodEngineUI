@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useLocation, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import AuthService from "../services/auth.service";
 import "../navbar bootstrap/bootstrap.module.min.css";
 import "./Navbar.css";
 import { RenderContext } from "./RenderContext";
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Navbar() {
-    const [showModeratorBoard, setShowModeratorBoard] = useState(false);
     const [showAdminBoard, setShowAdminBoard] = useState(false);
     const [currentUser, setCurrentUser] = useState(undefined);
-    const location = useLocation();
     const { render } = useContext(RenderContext);
 
     useEffect(() => {
@@ -19,7 +15,6 @@ export default function Navbar() {
 
         if (user) {
             setCurrentUser(user);
-            setShowModeratorBoard(user.roles.includes("ROLE_MODERATOR"));
             setShowAdminBoard(user.roles.includes("ROLE_ADMIN"));
         }
 
@@ -38,38 +33,6 @@ export default function Navbar() {
                         <nav className="site-navigation ml-auto "
                             role="navigation">
                             <ul className="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
-                                {showAdminBoard ? (
-                                    <li id="button-hover">
-                                        {/* <NavLink to={"/"}
-                                            className={({ isActive }) => (isActive ? 'active' : 'inactive')}>
-                                            Namai
-                                        </NavLink> */}
-                                    </li>
-                                ) : currentUser ? (
-                                    <>
-                                        <li id="button-hover">
-                                            <NavLink to={"/statistics"}
-                                                className={({ isActive }) => (isActive ? 'active' : 'inactive')} >
-                                                Statistika
-                                            </NavLink>
-                                        </li>
-                                    </>
-                                ) : (
-                                    <>
-                                        <li id="button-hover">
-                                            <NavLink to={"/"}
-                                                className={({ isActive }) => (isActive ? 'active' : 'inactive')}
-                                            >
-
-                                                <FontAwesomeIcon
-                                                    icon={faHome}
-                                                    id="home_button"
-                                                />
-
-                                            </NavLink>
-                                        </li>
-                                    </>
-                                )}
 
                                 {showAdminBoard ? (
                                     <>
@@ -77,12 +40,6 @@ export default function Navbar() {
                                             <NavLink to={"/users"}
                                                 className={({ isActive }) => (isActive ? 'active' : 'inactive')} >
                                                 Vartotojai
-                                            </NavLink>
-                                        </li>
-                                        <li id="button-hover">
-                                            <NavLink to={"/orders"}
-                                                className={({ isActive }) => (isActive ? 'active' : 'inactive')} >
-                                                Patiekalų pasirinkimas
                                             </NavLink>
                                         </li>
                                         <li id="button-hover">
@@ -103,22 +60,27 @@ export default function Navbar() {
                                                 Patiekalai
                                             </NavLink>
                                         </li>
-                                        {/* <li id="button-hover">
-                                            <a href="/"
-                                                onClick={logOut}>
-                                                Atsijungti
-                                            </a>
-                                        </li> */}
+                                        <li id="button-hover">
+                                            <NavLink to={"/ordersadmin"}
+                                                className={({ isActive }) => (isActive ? 'active' : 'inactive')} >
+                                                Vartotojų užsakymai
+                                            </NavLink>
+                                        </li>
                                     </>
                                 ) : currentUser ? (
                                     <>
                                         <li id="button-hover">
-                                            <NavLink to={"/orders"}
+                                            <NavLink to={"/dishordering"}
                                                 className={({ isActive }) => (isActive ? 'active' : 'inactive')} >
                                                 Patiekalų pasirinkimas
                                             </NavLink>
                                         </li>
-
+                                        <li id="button-hover">
+                                            <NavLink to={"/orders"}
+                                                className={({ isActive }) => (isActive ? 'active' : 'inactive')} >
+                                                Užsakymai
+                                            </NavLink>
+                                        </li>
                                     </>
                                 ) : (
                                     <>
