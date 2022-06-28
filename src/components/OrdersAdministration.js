@@ -20,6 +20,7 @@ export default function OrdersAdministration() {
   const [displayOrderModal, setDisplayOrderModal] = useState(false);
   const [orderDecreaseId, setOrderDecreaseId] = useState();
   const [orderId, setOrderId] = useState();
+  const [userId, setUserId] = useState();
   const currentUser = AuthService.getCurrentUser();
 
 
@@ -61,7 +62,7 @@ export default function OrdersAdministration() {
   };
 
   const removeDish = async (id) => {
-    const response = await fetch(`http://localhost:8080/api/orders/${id}`, {
+    const response = await fetch(`http://localhost:8080/api/orders/${userId}/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +81,7 @@ export default function OrdersAdministration() {
   };
 
   const orderDish = async (id) => {
-    const response = await fetch(`http://localhost:8080/api/orders/${id}`, {
+    const response = await fetch(`http://localhost:8080/api/orders/${userId}/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -98,8 +99,9 @@ export default function OrdersAdministration() {
     setDisplayOrderModal(false);
   };
 
-  const showOrderDecreaseModal = (id) => {
+  const showOrderDecreaseModal = (userId, id) => {
     setDisplayOrderDecreaseModal(true);
+    setUserId(userId);
     setOrderDecreaseId(id);
   };
 
@@ -108,8 +110,9 @@ export default function OrdersAdministration() {
   };
 
   
-  const showOrderModal = (id) => {
+  const showOrderModal = (userId, id) => {
     setDisplayOrderModal(true);
+    setUserId(userId);
     setOrderId(id);
   };
 
@@ -144,7 +147,7 @@ export default function OrdersAdministration() {
         <div className="container">
           <div className="row">
             <div className="col">
-              <h2>Jūs pasirinkę {ordersSum} patiekalus  </h2>
+              <h2>Vartotojai pasirinkę {ordersSum} patiekalus  </h2>
             </div>
           </div>
         </div>
@@ -204,7 +207,7 @@ export default function OrdersAdministration() {
                         >
 
                           <button
-                            onClick={() => showOrderDecreaseModal(order.dishId)}
+                            onClick={() => showOrderDecreaseModal(order.userId, order.dishId)}
                             className="btn"
                             type="button"
                             style={{ paddingTop: 0, paddingBottom: 10 }}
@@ -219,7 +222,7 @@ export default function OrdersAdministration() {
                           {order.orders}
 
                           <button
-                            onClick={() => showOrderModal(order.dishId)}
+                            onClick={() => showOrderModal(order.userId, order.dishId)}
                             className="btn"
                             type="button"
                             style={{ paddingTop: 0, paddingBottom: 10 }}
